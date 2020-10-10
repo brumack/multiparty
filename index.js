@@ -62,6 +62,7 @@ function Form(options) {
   self.maxFilesSize = opts.maxFilesSize || Infinity
   self.uploadDir = opts.uploadDir || os.tmpdir()
   self.encoding = opts.encoding || 'utf8'
+  self.handleAbort = opts.handleAbort || null
 
   self.bytesReceived = 0;
   self.bytesExpected = null;
@@ -192,6 +193,7 @@ Form.prototype.parse = function(req, cb) {
   function onReqAborted() {
     waitend = false;
     self.emit('aborted');
+    self.handleAbort && self.handleAbort()
     handleError(new Error('Request aborted'))
   }
 
